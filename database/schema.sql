@@ -44,12 +44,12 @@ CREATE TABLE IF NOT EXISTS students (
 );
 
 -- Insert Default Admin User
-INSERT INTO users (username, email, password, full_name, role) VALUES
+INSERT IGNORE INTO users (username, email, password, full_name, role) VALUES
 ('admin', 'admin@studentmis.com', '$2a$10$N9qo8uLOickgx2ZMRZoMye1gW0cANUt4XaVjt4VK8kVGwOLBpP3pO', 'Administrator', 'admin');
 -- Note: Password is bcrypt hashed. Plain text is "admin123"
 
 -- Insert Sample Students
-INSERT INTO students (roll_number, first_name, last_name, email, phone, date_of_birth, gender, enrollment_date) VALUES
-('STU001', 'John', 'Doe', 'john.doe@student.com', '9876543210', '2005-05-15', 'M', '2023-08-01'),
-('STU002', 'Jane', 'Smith', 'jane.smith@student.com', '9876543211', '2004-07-20', 'F', '2023-08-01'),
-('STU003', 'Michael', 'Johnson', 'michael.j@student.com', '9876543212', '2005-03-10', 'M', '2023-08-01');
+INSERT IGNORE INTO students (roll_number, first_name, last_name, email, phone, date_of_birth, gender, enrollment_date, city, state) VALUES
+('STU001', 'John', 'Doe', 'john.doe@student.com', '9876543210', '2005-05-15', 'M', '2023-08-01', 'Springfield', 'CA'),
+('STU002', 'Jane', 'Smith', 'jane.smith@student.com', '9876543211', '2004-07-20', 'F', '2023-08-01', 'Riverview', 'NY'),
+('STU003', 'Michael', 'Johnson', 'michael.j@student.com', '9876543212', '2005-03-10', 'M', '2023-08-01', 'Lakeside', 'TX');
