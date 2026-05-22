@@ -15,13 +15,10 @@ exports.login = async (req, res) => {
       });
     }
 
-    // Get user from database
-    const connection = await pool.getConnection();
-    const [rows] = await connection.query(
+    const [rows] = await pool.query(
       'SELECT id, username, email, full_name, password, role, status FROM users WHERE username = ? OR email = ?',
       [username, username]
     );
-    connection.release();
 
     if (rows.length === 0) {
       return res.status(401).json({
@@ -50,11 +47,20 @@ exports.login = async (req, res) => {
       });
     }
 
-    // Set session
-    req.session.userId = user.id;
-    req.session.username = user.username;
-    req.session.fullName = user.full_name;
-    req.session.role = user.role;
+    await new Promise((resolve, reject) => {
+      req.session.regenerate((err) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        req.session.userId = user.id;
+        req.session.username = user.username;
+        req.session.fullName = user.full_name;
+        req.session.role = user.role;
+        resolve();
+      });
+    });
 
     res.json({
       success: true,
@@ -85,6 +91,8 @@ exports.logout = (req, res) => {
         message: 'Error during logout'
       });
     }
+
+    res.clearCookie('connect.sid');
     res.json({
       success: true,
       message: 'Logout successful'
