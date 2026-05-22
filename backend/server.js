@@ -28,8 +28,9 @@ app.use(session({
 // Static files (if needed)
 app.use(express.static('../frontend'));
 
-// Routes will be imported here
-// app.use('/api/auth', require('./routes/auth'));
+// Routes
+const authRoutes = require('./routes/authRoutes');
+app.use('/api/auth', authRoutes);
 // app.use('/api/students', require('./routes/students'));
 
 // Health check endpoint
