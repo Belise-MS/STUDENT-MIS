@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Students - Student MIS</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="dashboard-wrapper">
+      <nav class="navbar">
+        <div class="navbar-container">
+          <div class="navbar-logo">
+            <span class="logo-icon">SM</span>
+            <span>Student MIS</span>
+          </div>
+          <ul class="navbar-menu">
+            <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+            <li><a href="students.html" class="nav-link active">Students</a></li>
+            <li><a href="#" id="logoutBtn" class="nav-link">Logout</a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <aside class="sidebar">
+        <div class="user-profile">
+          <div class="profile-avatar">AU</div>
+          <div class="profile-info">
+            <h3 id="userName">Admin User</h3>
+            <p id="userRole">Administrator</p>
+          </div>
+        </div>
+        <ul class="sidebar-menu">
+          <li>
+            <a href="dashboard.html" class="sidebar-link">
+              <span class="menu-icon">DB</span> Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="students.html" class="sidebar-link active">
+              <span class="menu-icon">ST</span> Students
+            </a>
+          </li>
+          <li>
+            <a href="#" id="sidebarLogout" class="sidebar-link">
+              <span class="menu-icon">LO</span> Logout
+            </a>
+          </li>
+        </ul>
+      </aside>
+
+      <main class="main-content">
+        <div class="content-header students-header">
+          <div>
+            <h1>Students</h1>
+            <p class="welcome-text">Create, update, and review student records.</p>
+          </div>
+          <button type="button" class="primary-action" id="newStudentBtn">Add Student</button>
+        </div>
+
+        <section class="student-toolbar">
+          <div class="search-box">
+            <label for="studentSearch" class="sr-only">Search students</label>
+            <input
+              type="search"
+              id="studentSearch"
+              class="form-input"
+              placeholder="Search by name, roll number, or email"
+            />
+          </div>
+          <div class="filter-box">
+            <label for="statusFilter" class="sr-only">Filter by status</label>
+            <select id="statusFilter" class="form-input">
+              <option value="all">All statuses</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="graduated">Graduated</option>
+            </select>
+          </div>
+        </section>
+
+        <section class="students-panel">
+          <div id="studentMessage" class="login-message"></div>
+          <div class="table-wrap">
+            <table class="students-table">
+              <thead>
+                <tr>
+                  <th>Roll No.</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Status</th>
+                  <th>Enrolled</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="studentsTableBody">
+                <tr>
+                  <td colspan="7" class="empty-state">Loading students...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="modal-backdrop" id="studentModal" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="studentModalTitle">
+        <div class="modal-header">
+          <h2 id="studentModalTitle">Add Student</h2>
+          <button type="button" class="icon-button" id="closeStudentModal" aria-label="Close modal">x</button>
+        </div>
+        <form id="studentForm" class="student-form">
+          <input type="hidden" id="studentId" />
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="rollNumber" class="form-label">Roll Number</label>
+              <input type="text" id="rollNumber" class="form-input" required />
+            </div>
+            <div class="form-group">
+              <label for="firstName" class="form-label">First Name</label>
+              <input type="text" id="firstName" class="form-input" required />
+            </div>
+            <div class="form-group">
+              <label for="lastName" class="form-label">Last Name</label>
+              <input type="text" id="lastName" class="form-input" required />
+            </div>
+            <div class="form-group">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" id="email" class="form-input" required />
+            </div>
+            <div class="form-group">
+              <label for="phone" class="form-label">Phone</label>
+              <input type="tel" id="phone" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label for="dateOfBirth" class="form-label">Date of Birth</label>
+              <input type="date" id="dateOfBirth" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label for="gender" class="form-label">Gender</label>
+              <select id="gender" class="form-input">
+                <option value="">Select gender</option>
+                <option value="F">Female</option>
+                <option value="M">Male</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="enrollmentDate" class="form-label">Enrollment Date</label>
+              <input type="date" id="enrollmentDate" class="form-input" required />
+            </div>
+            <div class="form-group">
+              <label for="status" class="form-label">Status</label>
+              <select id="status" class="form-input">
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+                <option value="graduated">Graduated</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="city" class="form-label">City</label>
+              <input type="text" id="city" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label for="state" class="form-label">State</label>
+              <input type="text" id="state" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label for="postalCode" class="form-label">Postal Code</label>
+              <input type="text" id="postalCode" class="form-input" />
+            </div>
+            <div class="form-group form-group-wide">
+              <label for="address" class="form-label">Address</label>
+              <textarea id="address" class="form-input" rows="3"></textarea>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="secondary-action" id="cancelStudentForm">Cancel</button>
+            <button type="submit" class="primary-action" id="saveStudentBtn">Save Student</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="js/students.js"></script>
+  </body>
+</html>
