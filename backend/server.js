@@ -2,43 +2,48 @@
 const express = require('express');
 const session = require('express-session');
 const cors = require('cors');
-const bodyParser = require('body-parser');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors({
+  origin: process.env.CLIENT_ORIGIN || 'http://localhost:3000',
+  credentials: true
+}));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Session Configuration
 app.use(session({
   secret: process.env.SESSION_SECRET || 'secret_key',
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: { 
-    secure: false,
+    secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
+    sameSite: 'lax',
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
   }
 }));
 
 // Static files (if needed)
-app.use(express.static('../frontend'));
+app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
 // Routes
 const authRoutes = require('./routes/authRoutes');
+const studentRoutes = require('./routes/studentRoutes');
 app.use('/api/auth', authRoutes);
-// app.use('/api/students', require('./routes/students'));
+app.use('/api/students', studentRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ 
     success: true, 
     message: 'Server is running',
-    timestamp: new Date()
+    timestamp: new Date().toISOString()
   });
 });
 
