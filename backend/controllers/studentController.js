@@ -89,6 +89,37 @@ exports.listStudents = async (req, res) => {
   }
 };
 
+exports.getStudentStats = async (req, res) => {
+  try {
+    const [[totals]] = await pool.query(`
+      SELECT
+        COUNT(*) AS totalStudents,
+        SUM(CASE WHEN status = 'active' THEN 1 ELSE 0 END) AS activeStudents,
+        SUM(CASE WHEN enrollment_date >= DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01') THEN 1 ELSE 0 END) AS newStudents
+      FROM students
+    `);
+
+    const totalStudents = Number(totals.totalStudents || 0);
+    const activeStudents = Number(totals.activeStudents || 0);
+    const activeStatus = totalStudents === 0
+      ? 100
+      : Math.round((activeStudents / totalStudents) * 100);
+
+    res.json({
+      success: true,
+      stats: {
+        totalStudents,
+        newStudents: Number(totals.newStudents || 0),
+        activeStatus,
+        lastUpdated: new Date().toISOString()
+      }
+    });
+  } catch (error) {
+    console.error('Student stats error:', error);
+    res.status(500).json({ success: false, message: 'Unable to load student statistics' });
+  }
+};
+
 exports.getStudent = async (req, res) => {
   try {
     const [rows] = await pool.query('SELECT * FROM students WHERE id = ?', [req.params.id]);

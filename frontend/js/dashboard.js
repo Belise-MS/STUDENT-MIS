@@ -49,14 +49,17 @@ function displayUserInfo(user) {
  */
 async function loadDashboardStats() {
   try {
-    // In a real app, this would call backend API
-    // For now, we'll use mock data that simulates API response
-    const stats = {
-      totalStudents: 45,
-      newStudents: 3,
-      activeStatus: 100,
-      lastUpdated: new Date()
-    };
+    const response = await fetch(`${API_URL}/students/stats/summary`, {
+      credentials: 'include'
+    });
+
+    if (!response.ok) {
+      throw new Error('Unable to load dashboard statistics');
+    }
+
+    const data = await response.json();
+    const stats = data.stats;
+    stats.lastUpdated = new Date(stats.lastUpdated);
 
     displayStats(stats);
   } catch (error) {

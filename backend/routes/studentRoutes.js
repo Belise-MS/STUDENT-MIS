@@ -5,6 +5,7 @@ const { checkAuth } = require('../middleware/auth');
 
 router.use(checkAuth);
 
+router.get('/stats/summary', studentController.getStudentStats);
 router.get('/', studentController.listStudents);
 router.get('/:id', studentController.getStudent);
 router.post('/', studentController.createStudent);
